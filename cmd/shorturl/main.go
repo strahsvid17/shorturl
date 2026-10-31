@@ -1,3 +1,20 @@
 package main
 
-func main() {}
+import (
+	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
+)
+
+func init() {
+	_ = godotenv.Load(".env")
+}
+
+func main() {
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+
+	http.ListenAndServe(":8080", r)
+}
