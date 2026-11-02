@@ -73,7 +73,7 @@ func (uh *URLHandler) CreateURLAlias() http.HandlerFunc {
 					http.Error(w, "alias duplication", http.StatusConflict)
 					return
 				} else {
-					http.Error(w, "some error", http.StatusInternalServerError)
+					http.Error(w, "Something went wrong", http.StatusInternalServerError)
 					return
 				}
 			}
