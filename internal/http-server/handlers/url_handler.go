@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	db "github.com/strahsvid17/shorturl/internal/db/postgres"
 	"github.com/strahsvid17/shorturl/internal/lib"
@@ -28,6 +29,24 @@ type aliasCreateBody struct {
 
 type aliasCreateResponse struct {
 	ShortURL string `json:"short_url"`
+}
+
+func (uh *URLHandler) FindURLAlias() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		alias := chi.URLParam(r, "alias")
+		if alias == "" {
+			http.Error(w, "empty alias not allowed", http.StatusBadRequest)
+			return
+		}
+
+		res, err := uh.q.FindURLByAlias(context.Background(), alias)
+		if err != nil {
+			http.Error(w, "alias not found", http.StatusNotFound)
+			return
+		}
+
+		http.Redirect(w, r, res, http.StatusPermanentRedirect)
+	}
 }
 
 func (uh *URLHandler) CreateURLAlias() http.HandlerFunc {

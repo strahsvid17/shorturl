@@ -34,6 +34,7 @@ func main() {
 	urlHandler := handlers.NewURLHandler(queries)
 
 	r.Route("/api", func(r chi.Router) {
+		r.Get("/{alias}", urlHandler.FindURLAlias())
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.BasicAuth(
 				"urlshortener",

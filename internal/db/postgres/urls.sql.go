@@ -23,9 +23,27 @@ type CreateURLAliasParams struct {
 	Alias string
 }
 
-func (q *Queries) CreateURLAlias(ctx context.Context, arg CreateURLAliasParams) (int32, error) {
+func (q *Queries) CreateURLAlias(ctx context.Context, arg CreateURLAliasParams) (int64, error) {
 	row := q.db.QueryRow(ctx, createURLAlias, arg.Url, arg.Alias)
-	var url_id int32
+	var url_id int64
 	err := row.Scan(&url_id)
 	return url_id, err
+}
+
+const findURLByAlias = `-- name: FindURLByAlias :one
+SELECT
+  url
+FROM
+  urls
+WHERE
+  alias = $1
+LIMIT
+  1
+`
+
+func (q *Queries) FindURLByAlias(ctx context.Context, alias string) (string, error) {
+	row := q.db.QueryRow(ctx, findURLByAlias, alias)
+	var url string
+	err := row.Scan(&url)
+	return url, err
 }

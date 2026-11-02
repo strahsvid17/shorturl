@@ -5,7 +5,7 @@
 package db
 
 type Url struct {
-	UrlID int32
+	UrlID int64
 	Alias string
 	Url   string
 }
