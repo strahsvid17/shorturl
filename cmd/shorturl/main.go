@@ -27,11 +27,11 @@ func main() {
 		context.Background(),
 		os.Getenv("DB_URL"),
 	)
-	defer pool.Close()
-
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+
+	defer pool.Close()
 
 	queries := db.New(pool)
 	urlHandler := handlers.NewURLHandler(queries)

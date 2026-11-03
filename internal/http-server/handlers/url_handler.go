@@ -39,13 +39,13 @@ func (uh *URLHandler) FindURLAlias() http.HandlerFunc {
 			return
 		}
 
-		res, err := uh.q.FindURLByAlias(context.Background(), alias)
+		fullURL, err := uh.q.FindURLByAlias(context.Background(), alias)
 		if err != nil {
 			http.Error(w, "alias not found", http.StatusNotFound)
 			return
 		}
 
-		http.Redirect(w, r, res, http.StatusPermanentRedirect)
+		http.Redirect(w, r, fullURL, http.StatusPermanentRedirect)
 	}
 }
 
