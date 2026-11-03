@@ -27,9 +27,12 @@ func main() {
 		context.Background(),
 		os.Getenv("DB_URL"),
 	)
+	defer pool.Close()
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+
 	queries := db.New(pool)
 	urlHandler := handlers.NewURLHandler(queries)
 
@@ -47,7 +50,7 @@ func main() {
 	})
 
 	server := http.Server{
-		Addr:        ":9090",
+		Addr:        ":" + os.Getenv("SERVER_PORT"),
 		Handler:     r,
 		IdleTimeout: time.Second * 60,
 	}
